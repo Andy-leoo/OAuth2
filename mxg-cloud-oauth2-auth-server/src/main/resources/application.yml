@@ -1,0 +1,5 @@
+server:
+  port: 8090
+  servlet:
+    context-path: /auth # 上下文路径，请求时要加上，后面网管需要  。应用名 localhost:8090/auth
+
