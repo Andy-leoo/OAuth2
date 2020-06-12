@@ -54,11 +54,11 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 // 资源id, 如商品资源
                 .resourceIds("product-server")
                 // 授权类型, 可同时支持多种授权类型
-                .authorizedGrantTypes("authorization_code", "password", "implicit","client_credentials","refresh_token")
+                .authorizedGrantTypes("authorization_code", "password", "refresh_token","implicit","client_credentials")
                 // 授权范围标识，哪部分资源可访问（all是标识，不是代表所有）
                 .scopes("all")
                 // false 跳转到授权页面手动点击授权，true 不用手动授权，直接响应授权码，
                 .autoApprove(false)
-                .redirectUris("http://www.mxg.com/"); // 客户端回调地址
+                .redirectUris("http://www.mengxuegu.com/"); // 客户端回调地址
     }
 }
