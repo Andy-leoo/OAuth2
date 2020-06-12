@@ -2,10 +2,12 @@ package com.mxg.oauth2.server.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
+import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 
 /**
@@ -60,5 +62,14 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 // false 跳转到授权页面手动点击授权，true 不用手动授权，直接响应授权码，
                 .autoApprove(false)
                 .redirectUris("http://www.mengxuegu.com/"); // 客户端回调地址
+    }
+
+    @Autowired
+    private UserDetailsService customUserDetailsService;
+
+    @Override
+    public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+        //刷新令牌获取新令牌 需要
+        endpoints.userDetailsService(customUserDetailsService);
     }
 }
