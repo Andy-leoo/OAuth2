@@ -10,6 +10,8 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.A
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.ClientDetailsService;
+import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
 import org.springframework.security.oauth2.provider.code.AuthorizationCodeServices;
 import org.springframework.security.oauth2.provider.code.JdbcAuthorizationCodeServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
@@ -29,6 +31,18 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    /**
+     * @author Andy-J<br>
+     * @version 1.0<br>
+     * @createDate 2020/6/13 17:37 <br>
+     * @desc 使用jdbc方式管理客户端信息
+     */
+    @Bean
+    public ClientDetailsService jdbcClientDetailsService(){
+        return new JdbcClientDetailsService(dataSource);
+    }
+
     /**
      * 这里涉及到一些参数 配置 简述
      * withClient：允许访问此认证服务器的客户端id , 如：PC、APP、小程序各不同的的客户端id。
@@ -55,19 +69,22 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         //使用内存方式
-        clients.inMemory()
-                .withClient("JX-pc")//客户端id
-                // 客户端密码，要加密,不然一直要求登录, 获取不到令牌, 而且一定不能被泄露
-                .secret(passwordEncoder.encode("JX-PWD"))
-                // 资源id, 如商品资源
-                .resourceIds("product-server")
-                // 授权类型, 可同时支持多种授权类型
-                .authorizedGrantTypes("authorization_code", "password", "refresh_token","implicit","client_credentials")
-                // 授权范围标识，哪部分资源可访问（all是标识，不是代表所有）
-                .scopes("all")
-                // false 跳转到授权页面手动点击授权，true 不用手动授权，直接响应授权码，
-                .autoApprove(false)
-                .redirectUris("http://www.mengxuegu.com/"); // 客户端回调地址
+//        clients.inMemory()
+//                .withClient("JX-pc")//客户端id
+//                // 客户端密码，要加密,不然一直要求登录, 获取不到令牌, 而且一定不能被泄露
+//                .secret(passwordEncoder.encode("JX-PWD"))
+//                // 资源id, 如商品资源
+//                .resourceIds("product-server")
+//                // 授权类型, 可同时支持多种授权类型
+//                .authorizedGrantTypes("authorization_code", "password", "refresh_token","implicit","client_credentials")
+//                // 授权范围标识，哪部分资源可访问（all是标识，不是代表所有）
+//                .scopes("all")
+//                // false 跳转到授权页面手动点击授权，true 不用手动授权，直接响应授权码，
+//                .autoApprove(false)
+//                .redirectUris("http://www.mengxuegu.com/"); // 客户端回调地址
+
+        //使用jdbc
+        clients.withClientDetails(jdbcClientDetailsService());
     }
 
     @Autowired
@@ -92,6 +109,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         return new JdbcAuthorizationCodeServices(dataSource);
     }
 
+
+
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
         //刷新令牌获取新令牌 需要
@@ -102,5 +121,9 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
         //授权码管理策略，针对授权码模式有效，会将授权码放到 auth_code 表，授权后就会删除它
         endpoints.authorizationCodeServices(jdbcAuthorizationCodeServices());
+    }
+
+    public static void main(String[] args) {
+//        System.out.println(passwordEncoder.encode("JX-PWD"));
     }
 }
