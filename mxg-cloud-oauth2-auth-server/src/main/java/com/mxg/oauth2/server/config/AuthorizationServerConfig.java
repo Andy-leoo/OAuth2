@@ -81,7 +81,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 //                .scopes("all")
 //                // false 跳转到授权页面手动点击授权，true 不用手动授权，直接响应授权码，
 //                .autoApprove(false)
-//                .redirectUris("http://www.mengxuegu.com/"); // 客户端回调地址
+//                .redirectUris("http://www.mxg.com/"); // 客户端回调地址
 
         //使用jdbc
         clients.withClientDetails(jdbcClientDetailsService());

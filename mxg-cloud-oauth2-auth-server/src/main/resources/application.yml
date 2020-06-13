@@ -20,3 +20,12 @@ spring:
     timeBetweenEvictionRunsMillis: 60000
     minEvictableIdleTimeMillis: 300000
     validationQuery: SELECT 1 FROM DUAL
+
+mybatis-plus:
+  # 指定实体类所有包
+  type-aliases-package: com.mxg.oauth2.web.entities
+
+# 日志级别，会打印sql语句
+logging:
+  level:
+    com.mxg.oauth2.web.mapper: debug
