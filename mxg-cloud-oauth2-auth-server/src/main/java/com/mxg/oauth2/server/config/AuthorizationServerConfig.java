@@ -123,7 +123,17 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         endpoints.authorizationCodeServices(jdbcAuthorizationCodeServices());
     }
 
-    public static void main(String[] args) {
-//        System.out.println(passwordEncoder.encode("JX-PWD"));
+    /**
+     * @author Andy-J<br>
+     * @version 1.0<br>
+     * @createDate 2020/6/13 19:29 <br>
+     * @desc 令牌端点的安全配置
+     */
+    @Override
+    public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
+        // 所有人可访问 /oauth/token_key 后面要获取公钥, 默认拒绝访问
+        security.tokenKeyAccess("permitAll()");
+        // 认证后可访问 /oauth/check_token , 默认拒绝访问
+        security.checkTokenAccess("isAuthenticated()");
     }
 }
