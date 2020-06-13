@@ -1,6 +1,7 @@
 package com.mxg.oauth2.server.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -9,7 +10,11 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.A
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.code.AuthorizationCodeServices;
+import org.springframework.security.oauth2.provider.code.JdbcAuthorizationCodeServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
+
+import javax.sql.DataSource;
 
 /**
  * @author jiangxiao
@@ -71,6 +76,22 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Autowired
     private TokenStore tokenStore;
 
+    @Autowired
+    private DataSource dataSource;
+
+    /**
+     * @author Andy-J<br>
+     * @version 1.0<br>
+     * @createDate 2020/6/13 11:27 <br>
+     * @desc  授权码管理策略
+     *          JDBC方式保存授权码到 oauth_code 表中,
+     *          意义不大，因为获取一次令牌后，授权码就失效了
+     */
+    @Bean
+    public AuthorizationCodeServices jdbcAuthorizationCodeServices(){
+        return new JdbcAuthorizationCodeServices(dataSource);
+    }
+
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
         //刷新令牌获取新令牌 需要
@@ -78,5 +99,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
         //令牌管理策略
         endpoints.tokenStore(tokenStore);
+
+        //授权码管理策略，针对授权码模式有效，会将授权码放到 auth_code 表，授权后就会删除它
+        endpoints.authorizationCodeServices(jdbcAuthorizationCodeServices());
     }
 }
