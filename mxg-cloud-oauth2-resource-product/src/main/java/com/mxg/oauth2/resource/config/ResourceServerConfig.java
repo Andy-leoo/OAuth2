@@ -1,5 +1,6 @@
-package com.mxg.oauth2.resource;
+package com.mxg.oauth2.resource.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -9,6 +10,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.R
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.RemoteTokenServices;
 import org.springframework.security.oauth2.provider.token.ResourceServerTokenServices;
+import org.springframework.security.oauth2.provider.token.TokenStore;
 
 /**
  * <Description> <br>
@@ -29,6 +31,8 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     //配置当前资源服务器的ID
     private static final String RESOURCE_ID = "product-server";
 
+    @Autowired
+    private TokenStore tokenStore;
     /**
      * @author Andy-J<br>
      * @version 1.0<br>
@@ -44,7 +48,8 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     @Override
     public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
         resources.resourceId(RESOURCE_ID)//配置当前资源服务器的ID, 会在认证服务器验证(客户端表的 resources配置了就可以访问这个服务)
-                .tokenServices(tokenServices());//实现令牌服务ResourceServerTokenServices实例
+                    .tokenStore(tokenStore);
+//                .tokenServices(tokenServices());//实现令牌服务ResourceServerTokenServices实例
     }
 
     /**
@@ -53,7 +58,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
      * 如果认证服务器和资源服务器同一服务时,则直接采用此默认服务验证即可
      * 2. RemoteTokenServices (当前采用这个)
      * 当认证服务器和资源服务器不是同一服务时, 要使用此服务去远程认证服务器验证
-     */
+
     public ResourceServerTokenServices tokenServices(){
         //资源服务器去远程认证服务器验证token是否有效
         RemoteTokenServices services = new RemoteTokenServices();
@@ -64,7 +69,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         //在认证服务器配置的客户端密码
         services.setClientSecret("JX-PWD");
         return services;
-    }
+    }*/
 
     @Override
     public void configure(HttpSecurity http) throws Exception {

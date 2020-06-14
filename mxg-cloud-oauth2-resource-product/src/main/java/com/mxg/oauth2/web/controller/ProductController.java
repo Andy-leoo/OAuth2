@@ -23,7 +23,7 @@ import java.util.List;
 @RequestMapping("/product")
 public class ProductController {
     @GetMapping("/list")
-    @PreAuthorize("hasAuthority('product:list')")
+    @PreAuthorize("hasAuthority('sys:index')")
     public MxgResult list() {
         List<String> list = new ArrayList<>();
         list.add("ipad");
