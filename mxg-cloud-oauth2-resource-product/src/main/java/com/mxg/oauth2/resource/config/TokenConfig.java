@@ -1,10 +1,16 @@
 package com.mxg.oauth2.resource.config;
 
+import org.apache.commons.io.IOUtils;
+import org.junit.platform.engine.discovery.ClasspathResourceSelector;
+import org.omg.CORBA.PUBLIC_MEMBER;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
+
+import java.io.IOException;
 
 /**
  * <Description> <br>
@@ -19,7 +25,7 @@ import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 @Configuration
 public class TokenConfig {
 
-    private static final String SINGIN_KEY = "JX-KEY";
+//    private static final String SINGIN_KEY = "JX-KEY";
 
 
     @Bean
@@ -34,7 +40,20 @@ public class TokenConfig {
     public JwtAccessTokenConverter jwtAccessTokenConverter(){
         JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
         //对称密钥来签署我们的令牌，资源服务器也将使用此密钥来验证准确性
-        converter.setSigningKey(SINGIN_KEY);
+//        converter.setSigningKey(SINGIN_KEY);
+
+        //非对称加密
+        ClassPathResource classPathResource = new ClassPathResource("public.txt");
+
+        String publicKey = null;
+        try {
+            publicKey = IOUtils.toString(classPathResource.getInputStream(),"UTF-8");
+            System.out.println("publicKey:" + publicKey);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        converter.setVerifierKey(publicKey);
         return converter;
     }
 }
