@@ -10,6 +10,7 @@
     <modules>
         <module>mxg-cloud-oauth2-base</module>
         <module>mxg-cloud-oauth2-auth-server</module>
+        <module>mxg-cloud-oauth2-resource-product</module>
     </modules>
 
     <packaging>pom</packaging>
