@@ -8,6 +8,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
+import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
+import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
 
 import javax.sql.DataSource;
@@ -57,6 +59,19 @@ public class TokenConfig {
         //redis 管理令牌
 //        return new RedisTokenStore(redisConnectionFactory);
         //jdbc 管理令牌
-        return new JdbcTokenStore(dataSource());
+//        return new JdbcTokenStore(dataSource());
+        //JWT管理令牌 ，
+        return new JwtTokenStore(jwtAccessTokenConverter());
+    }
+
+    private static final String SINGIN_KEY = "JX-KEY";
+
+    // 使用 JwtAccessTokenConverter 中定义jwt签名密码
+    @Bean
+    public JwtAccessTokenConverter jwtAccessTokenConverter(){
+        JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
+        //对称密钥来签署我们的令牌，资源服务器也将使用此密钥来验证准确性
+        converter.setSigningKey(SINGIN_KEY);
+        return converter;
     }
 }
