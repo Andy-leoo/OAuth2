@@ -12,6 +12,7 @@
         <module>mxg-cloud-oauth2-auth-server</module>
         <module>mxg-cloud-oauth2-resource-product</module>
         <module>mxg-cloud-oauth2-sso-client1</module>
+        <module>mxg-cloud-oauth2-sso-client2</module>
     </modules>
 
     <packaging>pom</packaging>
