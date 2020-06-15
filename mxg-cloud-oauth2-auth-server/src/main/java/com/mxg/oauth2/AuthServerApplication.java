@@ -2,6 +2,7 @@ package com.mxg.oauth2;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 
 /**
  * @author jiangxiao
@@ -17,6 +18,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  *          令牌端点的安全配置
  * @date 2020/6/1115:42
  */
+@EnableEurekaClient //本服务启动后会自动注册进eureka
 @SpringBootApplication
 public class AuthServerApplication {
 

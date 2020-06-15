@@ -13,6 +13,8 @@
         <module>mxg-cloud-oauth2-resource-product</module>
         <module>mxg-cloud-oauth2-sso-client1</module>
         <module>mxg-cloud-oauth2-sso-client2</module>
+        <module>mxg-cloud-eureka</module>
+        <module>mxg-cloud-gateway</module>
     </modules>
 
     <packaging>pom</packaging>
