@@ -26,8 +26,10 @@ public class SsoSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/").permitAll()
                 .anyRequest().authenticated()
         .and()
+                //退出系统
         .logout()
-        .logoutSuccessUrl("http://localhost:8090/auth/logout")
+                //当前退出成功后  跳转认证服务器退出
+        .logoutSuccessUrl("http://localhost:7001/auth/logout")
         .and().csrf().disable()
     ;
     }
