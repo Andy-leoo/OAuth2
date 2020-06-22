@@ -25,7 +25,7 @@ public class SsoSecurityConfig extends WebSecurityConfigurerAdapter {
                 .logout()
                 //当前应用退出后，会交给某个处理
                 // 请求认证服务器将用户进行退出
-                .logoutSuccessUrl("http://localhost:8090/auth/logout")
+                .logoutSuccessUrl("http://localhost:7001/auth/logout")
             .and()
                 .csrf().disable()
             ;
